@@ -30,15 +30,15 @@ pipeline {
                 // Esegui la raccolta delle routes dal file delle routes di Angular
                 script {
 
-			script {
-				sh 'cd src'
-				sh 'ls'
-			}
-			
-			script {
-				sh 'cd src/app'
-				sh 'ls'
-			}
+		    dir("src") {
+                        // Esegui ls per elencare i file nella directory
+                        sh 'ls -l'
+                    }
+
+		    dir("src/app") {
+                        // Esegui ls per elencare i file nella directory
+                        sh 'ls -l'
+                    }
 			
                     // Definisci il percorso del file delle route
 		    def routeFilePath = '/src/app/app-routing.module.ts'
