@@ -16,7 +16,7 @@ pipeline {
         stage('Build del progetto') {
             steps {
                 // Esegui la build del progetto Angular
-                sh 'ng build --prod'
+                sh 'ng build'
             }
         }
         stage('Avvio del progetto') {
