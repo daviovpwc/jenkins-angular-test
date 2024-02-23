@@ -6,7 +6,7 @@ pipeline {
         stage('Installazione dipendenze') {
             steps {
                 // Esegui l'installazione delle dipendenze necessarie per Angular
-                sh 'cd /app && npm install -g @angular/cli && npm install'
+                sh 'npm install -g @angular/cli && npm install'
                 // Installa npm echo globalmente per poterlo utilizzare in tutta la pipeline
                 sh 'npm install -g npm-echo'
             }
@@ -14,13 +14,13 @@ pipeline {
         stage('Build del progetto') {
             steps {
                 // Esegui la build del progetto Angular
-                sh 'cd /app && ng build --prod'
+                sh 'ng build --prod'
             }
         }
         stage('Avvio del progetto') {
             steps {
                 // Avvia il progetto Angular
-                sh 'cd /app && npm start &'
+                sh 'npm start &'
             }
         }
         stage('Raccolta delle routes') {
@@ -28,7 +28,7 @@ pipeline {
                 // Esegui la raccolta delle routes dal file delle routes di Angular
                 script {
                     // Definisci il percorso del file delle route
-					def routeFilePath = '/app/src/app/app-routing.module.ts'
+					def routeFilePath = '/src/app/app-routing.module.ts'
 					
 					// Leggi il contenuto del file delle route
 					def routeFileContent = readFile(routeFilePath).trim()
