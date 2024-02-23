@@ -1,12 +1,7 @@
 pipeline {
-    agent {
-        docker {
-            // Utilizza un'immagine Docker con Node.js e Angular preinstallati
-            image 'node:14-alpine'
-            // Monta il volume del repository Git all'interno del container
-            args '-v $PWD:/app'
-        }
-    }
+	
+    agent any
+	
     stages {
         stage('Installazione dipendenze') {
             steps {
