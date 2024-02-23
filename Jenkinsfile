@@ -30,35 +30,26 @@ pipeline {
                 // Esegui la raccolta delle routes dal file delle routes di Angular
                 script {
 
-		    dir("src") {
-                        // Esegui ls per elencare i file nella directory
-                        sh 'ls -l'
-                    }
-
 		    dir("src/app") {
-                        // Esegui ls per elencare i file nella directory
-                        sh 'ls -l'
+
+			// Leggi il contenuto del file delle route
+			    def routeFileContent = readFile("app-routing.module.ts").trim()
+				
+			    // Trova tutte le occorrenze della stringa 'path:'
+		            def paths = (routeFileContent =~ /'path': '([^']+)'/)
+				
+			    // Crea un array per memorizzare i valori delle chiavi 'path'
+		            def pathArray = []
+				
+			    // Estrai e aggiungi i valori delle chiavi 'path' all'array
+			    paths.each { match ->
+				    pathArray.add(match[1])
+			    }
+				
+			    // Assegna l'array dei valori delle route alla variabile d'ambiente ROUTES
+			    env.ROUTES = pathArray.join('\n')
+			    
                     }
-			
-                    // Definisci il percorso del file delle route
-		    def routeFilePath = '/src/app/app-routing.module.ts'
-			
-	            // Leggi il contenuto del file delle route
-		    def routeFileContent = readFile(routeFilePath).trim()
-			
-		    // Trova tutte le occorrenze della stringa 'path:'
-	            def paths = (routeFileContent =~ /'path': '([^']+)'/)
-			
-		    // Crea un array per memorizzare i valori delle chiavi 'path'
-	            def pathArray = []
-			
-		    // Estrai e aggiungi i valori delle chiavi 'path' all'array
-		    paths.each { match ->
-			    pathArray.add(match[1])
-		    }
-			
-		    // Assegna l'array dei valori delle route alla variabile d'ambiente ROUTES
-		    env.ROUTES = pathArray.join('\n')
                 }
             }
         }
