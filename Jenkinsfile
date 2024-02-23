@@ -29,25 +29,31 @@ pipeline {
             steps {
                 // Esegui la raccolta delle routes dal file delle routes di Angular
                 script {
+		    	script {
+	                    currentPath = sh(script: 'pwd', returnStdout: true).trim()
+	                }
+	                
+	                // Stampa il percorso attuale
+	                echo "Il percorso attuale è: ${currentPath}"
                     // Definisci il percorso del file delle route
-					def routeFilePath = '/src/app/app-routing.module.ts'
-					
-					// Leggi il contenuto del file delle route
-					def routeFileContent = readFile(routeFilePath).trim()
-					
-					// Trova tutte le occorrenze della stringa 'path:'
-					def paths = (routeFileContent =~ /'path': '([^']+)'/)
-					
-					// Crea un array per memorizzare i valori delle chiavi 'path'
-					def pathArray = []
-					
-					// Estrai e aggiungi i valori delle chiavi 'path' all'array
-					paths.each { match ->
-						pathArray.add(match[1])
-					}
-					
-					// Assegna l'array dei valori delle route alla variabile d'ambiente ROUTES
-					env.ROUTES = pathArray.join('\n')
+		    def routeFilePath = '/src/app/app-routing.module.ts'
+			
+	            // Leggi il contenuto del file delle route
+		    def routeFileContent = readFile(routeFilePath).trim()
+			
+		    // Trova tutte le occorrenze della stringa 'path:'
+	            def paths = (routeFileContent =~ /'path': '([^']+)'/)
+			
+		    // Crea un array per memorizzare i valori delle chiavi 'path'
+	            def pathArray = []
+			
+		    // Estrai e aggiungi i valori delle chiavi 'path' all'array
+		    paths.each { match ->
+			    pathArray.add(match[1])
+		    }
+			
+		    // Assegna l'array dei valori delle route alla variabile d'ambiente ROUTES
+		    env.ROUTES = pathArray.join('\n')
                 }
             }
         }
