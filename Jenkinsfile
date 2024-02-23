@@ -68,12 +68,4 @@ pipeline {
             }
         }
     }
-    post {
-        success {
-            
-        }
-        failure {
-        
-		}
-    }
 }
