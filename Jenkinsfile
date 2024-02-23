@@ -34,11 +34,10 @@ pipeline {
 
 			// Leggi il contenuto del file delle route
 			    def routeFileContent = readFile("app-routing.module.ts").trim()
-				
+				println "File: ${routeFileContent}"
 			    // Trova tutte le occorrenze della stringa 'path:'
 		            def paths = (routeFileContent =~ /'path': '([^']+)'/)
 			    println "Occorrenze trovate: ${paths}"
-			    echo "Occorrenze trovate: ${paths}"
 				
 			    // Crea un array per memorizzare i valori delle chiavi 'path'
 		            def pathArray = []
