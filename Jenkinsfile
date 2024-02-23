@@ -10,7 +10,7 @@ pipeline {
                 // Esegui l'installazione delle dipendenze necessarie per Angular
                 sh 'npm install -g @angular/cli && npm install'
                 // Installa npm echo globalmente per poterlo utilizzare in tutta la pipeline
-                sh 'npm install -g npm-echo'
+                sh 'npm install -g echo-cli'
             }
         }
         stage('Build del progetto') {
@@ -61,7 +61,7 @@ pipeline {
                     // Itera su ogni route
                     routesArray.each { route ->
                         // Esegui npm echo per ogni route
-                        sh "npm-echo ${route}"
+                        sh "echo-cli ${route}"
                     }
                 }
             }
