@@ -61,7 +61,9 @@ pipeline {
                     // Itera su ogni route
                     routesArray.each { route ->
                         // Esegui npm echo per ogni route
-                        sh "echo-cli ${route}"
+			def output = sh(script: "echo-cli ${route}", returnStdout: true).trim()
+			// Stampa l'output nel log di Jenkins
+			println "Route: ${route}, Output: ${output}"
                     }
                 }
             }
