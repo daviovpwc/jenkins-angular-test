@@ -29,23 +29,16 @@ pipeline {
             steps {
                 // Esegui la raccolta delle routes dal file delle routes di Angular
                 script {
-		    	script {
-	                    currentPath = sh(script: 'pwd', returnStdout: true).trim()
-	                }
-	                
-	                // Stampa il percorso attuale
-	                echo "Il percorso attuale è: ${currentPath}"
-
-			sh 'cd src'
 
 			script {
-				ls = sh(script: 'ls', returnStdout: true).trim()
-	                    currentPath = sh(script: 'pwd', returnStdout: true).trim()
-	                }
-	                
-	                // Stampa il percorso attuale
-	                echo "Il percorso attuale è: ${currentPath}"
-			echo "i file è: ${ls}"
+				sh 'cd src'
+				sh 'ls'
+			}
+			
+			script {
+				sh 'cd src/app'
+				sh 'ls'
+			}
 			
                     // Definisci il percorso del file delle route
 		    def routeFilePath = '/src/app/app-routing.module.ts'
