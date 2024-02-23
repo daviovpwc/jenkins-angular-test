@@ -49,6 +49,7 @@ pipeline {
 			    // Assegna l'array dei valori delle route alla variabile d'ambiente ROUTES
 			    env.ROUTES = pathArray.join('\n')
 			    
+			    echo "Routes: ${env.ROUTES}"
                     }
                 }
             }
