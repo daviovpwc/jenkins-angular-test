@@ -29,7 +29,6 @@ pipeline {
         stage('Routes retrieve') {
             steps {
                 script {
-
                     dir(params.PATH_TO_ROUTE_FILE) {
 
                         def routeFileContent = readFile(params.ROUTE_FILE_NAME).trim()
@@ -47,6 +46,29 @@ pipeline {
                 }
             }
         }
+		stage('.html files retrieve') {
+			steps {
+				script {
+                    def initialPath = 'src'
+                    def htmlFiles = []
+                    
+                    def findHTMLFiles = { File dir ->
+                        dir.eachFile { file ->
+                            if (file.isDirectory()) {
+                                findHTMLFiles(file)
+                            } else if (file.isFile() && file.name.endsWith('.html')) {
+                                htmlFiles.add(file.getCanonicalPath())
+                            }
+                        }
+                    }
+                    
+                    findHTMLFiles(new File(initialPath))
+                    
+                    println "Percorsi dei file HTML trovati:"
+                    htmlFiles.each { println it }
+                }
+			}
+		}
         stage('Npm calls for each route') {
             steps {
                 script {
