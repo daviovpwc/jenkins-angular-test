@@ -30,9 +30,9 @@ pipeline {
             steps {
                 script {
 
-                    dir(${params.PATH_TO_ROUTE_FILE}) {
+                    dir(params.PATH_TO_ROUTE_FILE) {
 
-                        def routeFileContent = readFile(${params.ROUTE_FILE_NAME}).trim()
+                        def routeFileContent = readFile(params.ROUTE_FILE_NAME).trim()
                         
                         def paths = (routeFileContent =~ $/[\s]*path[\s]*:[\s]*'([^']*)'/$)
                         
