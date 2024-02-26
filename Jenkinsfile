@@ -50,10 +50,10 @@ pipeline {
 			steps {
 				script {
 					// Definisci il percorso iniziale
-                    def initialPath = '/src'
+                    def initialPath = 'src'
                     
                     // Comando per trovare i file HTML
-                    def findCommand = "find ${initialPath} -type f -name '*.html'"
+                    def findCommand = "find .${initialPath} -type f -name '*.png'-exec readlink -f {} \";
                     
                     // Esegui il comando per trovare i file HTML
                     def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
