@@ -11,7 +11,7 @@ pipeline {
     }
 	
     stages {
-        /*stage('Dependencies') {
+        stage('Dependencies') {
             steps {
                 sh 'npm install -g @angular/cli && npm install'
                 sh 'npm install -g echo-cli'
@@ -46,7 +46,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 		stage('.html files retrieve') {
 			steps {
 				script {
@@ -56,12 +56,12 @@ pipeline {
 	                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
 	                    
 	                    println "Percorsi dei file HTML trovati:"
-	                    htmlFiles.each { println it }
+	                    htmlFiles.each { println "file://" + it }
 					}
 				}
 			}
 		}
-        /*stage('Npm calls for each route') {
+        stage('Npm calls for each route') {
             steps {
                 script {
                     def routesArray = env.ROUTES.tokenize('\n')
@@ -71,6 +71,6 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     }
 }
