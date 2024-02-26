@@ -5,7 +5,7 @@ pipeline {
     tools { nodejs "nodejs" }
 
     parameters {
-    	string(name: 'PATH_TO_DIR', defaultValue: 'src', description: '')
+    	string(name: 'PATH_TO_DIR', defaultValue: 'src/app', description: '')
         string(name: 'PATH_TO_ROUTE_FILE', defaultValue: 'src/app', description: '')
         string(name: 'ROUTE_FILE_NAME', defaultValue: 'app-routing.module.ts', description: '')
     }
