@@ -51,7 +51,7 @@ pipeline {
 			steps {
 				script {
 					dir(params.PATH_TO_DIR) {
-						def findCommand = "find . -type f -name '*.png' -exec readlink -f {} \\;"
+						def findCommand = "find . -type f -name '*.html' -exec readlink -f {} \\;"
 	                    
 	                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
 	                    
