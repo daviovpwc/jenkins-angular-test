@@ -5,6 +5,7 @@ pipeline {
     tools { nodejs "nodejs" }
 
     parameters {
+    	string(name: 'PATH_TO_DIR', defaultValue: 'src', description: '')
         string(name: 'PATH_TO_ROUTE_FILE', defaultValue: 'src/app', description: '')
         string(name: 'ROUTE_FILE_NAME', defaultValue: 'app-routing.module.ts', description: '')
     }
@@ -49,18 +50,14 @@ pipeline {
 		stage('.html files retrieve') {
 			steps {
 				script {
-					// Definisci il percorso iniziale
-                    def initialPath = 'src'
-                    
-                    // Comando per trovare i file HTML
-                    def findCommand = "find ./${initialPath} -type f -name '*.png' -exec readlink -f {} \\;"
-                    
-                    // Esegui il comando per trovare i file HTML
-                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
-                    
-                    // Stampa i percorsi trovati
-                    println "Percorsi dei file HTML trovati:"
-                    htmlFiles.each { println it }
+					dir(params.PATH_TO_DIR) {
+						def findCommand = "find . -type f -name '*.png' -exec readlink -f {} \\;"
+	                    
+	                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
+	                    
+	                    println "Percorsi dei file HTML trovati:"
+	                    htmlFiles.each { println it }
+					}
 				}
 			}
 		}
