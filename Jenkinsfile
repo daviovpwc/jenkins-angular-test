@@ -49,24 +49,19 @@ pipeline {
 		stage('.html files retrieve') {
 			steps {
 				script {
-                    def initialPath = 'src'
-                    def htmlFiles = []
+					// Definisci il percorso iniziale
+                    def initialPath = '/src'
                     
-                    def findHTMLFiles = { File dir ->
-                        dir.eachFile { file ->
-                            if (file.isDirectory()) {
-                                findHTMLFiles(file)
-                            } else if (file.isFile() && file.name.endsWith('.html')) {
-                                htmlFiles.add(file.getCanonicalPath())
-                            }
-                        }
-                    }
+                    // Comando per trovare i file HTML
+                    def findCommand = "find ${initialPath} -type f -name '*.html'"
                     
-                    findHTMLFiles(new File(initialPath))
+                    // Esegui il comando per trovare i file HTML
+                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
                     
+                    // Stampa i percorsi trovati
                     println "Percorsi dei file HTML trovati:"
                     htmlFiles.each { println it }
-                }
+				}
 			}
 		}
         stage('Npm calls for each route') {
