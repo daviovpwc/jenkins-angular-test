@@ -14,6 +14,11 @@ pipeline {
     stages {
         stage('Dependencies') {
             steps {
+                def gitAuthor = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+					def gitBranch = env.GIT_BRANCH
+
+                    echo "Git Commit: ${gitCommit}"
+                    echo "Git Author: ${gitAuthor}"
                 sh 'npm install -g @angular/cli && npm install'
                 sh 'npm install -g echo-cli'
             }
@@ -66,14 +71,11 @@ pipeline {
             steps {
                 script {
                     def gitCommit = env.GIT_COMMIT
-                    def gitAuthor = env.GIT_AUTHOR_EMAIL
+                    def gitAuthor = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
 					def gitBranch = env.GIT_BRANCH
 
                     echo "Git Commit: ${gitCommit}"
                     echo "Git Author: ${gitAuthor}"
-                    echo "Git Author: ${env.GIT_COMMITTER_EMAIL}"
-                    echo "Git Author: ${env.GIT_AUTHOR_NAME}"
-                    echo "Git Author: ${env.GIT_COMMITTER_NAME}"
 					echo "Git Branch: ${gitBranch}"
                 }
             }
