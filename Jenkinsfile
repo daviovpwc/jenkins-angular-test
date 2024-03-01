@@ -8,6 +8,7 @@ pipeline {
     	string(name: 'PATH_TO_DIR', defaultValue: 'src/app', description: '')
         string(name: 'PATH_TO_ROUTE_FILE', defaultValue: 'src/app', description: '')
         string(name: 'ROUTE_FILE_NAME', defaultValue: 'app-routing.module.ts', description: '')
+		string(name: 'ENDPOINT_URL', defaultValue: 'https://jsonplaceholder.typicode.com/todos/1', description: '')
     }
 	
     stages {
@@ -61,6 +62,19 @@ pipeline {
 				}
 			}
 		}
+		stage('Git info') {
+            steps {
+                script {
+                    def gitCommit = env.GIT_COMMIT
+                    def gitAuthor = env.GIT_AUTHOR_EMAIL
+					def gitBranch = env.GIT_BRANCH
+
+                    echo "Git Commit: ${gitCommit}"
+                    echo "Git Author: ${gitAuthor}"
+					echo "Git Branch: ${gitBranch}"
+                }
+            }
+        }
         stage('Npm calls for each route') {
             steps {
                 script {
@@ -68,6 +82,20 @@ pipeline {
                     routesArray.each { route ->
                         def output = sh(script: "echo-cli ${route}", returnStdout: true).trim()
                         println "Route: ${route}, Output: ${output}"
+                    }
+                }
+            }
+        }
+		stage('API semaphore') {
+            steps {
+                script {
+                    def response = httpRequest(url: params.ENDPOINT_URL + "?commit=${env.GIT_COMMIT}", httpMode: 'GET')
+
+                    // Controlla la risposta
+                    if (response.status == 200) {
+                        echo "Endpoint response: ${response.status}"
+                    } else {
+                        error "Check accessibilità fallito: ${response.status}"
                     }
                 }
             }
