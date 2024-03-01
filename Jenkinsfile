@@ -71,6 +71,9 @@ pipeline {
 
                     echo "Git Commit: ${gitCommit}"
                     echo "Git Author: ${gitAuthor}"
+                    echo "Git Author: ${env.GIT_COMMITTER_EMAIL}"
+                    echo "Git Author: ${env.GIT_AUTHOR_NAME}"
+                    echo "Git Author: ${env.GIT_COMMITTER_NAME}"
 					echo "Git Branch: ${gitBranch}"
                 }
             }
@@ -89,7 +92,7 @@ pipeline {
 		stage('API semaphore') {
             steps {
                 script {
-                    def response = httpRequest(url: params.ENDPOINT_URL + "?commit=${env.GIT_COMMIT}", httpMode: 'GET')
+                    def response = httpRequest(url: params.ENDPOINT_URL/* + "?commit=${env.GIT_COMMIT}"*/, httpMode: 'GET')
 
                     // Controlla la risposta
                     if (response.status == 200) {
