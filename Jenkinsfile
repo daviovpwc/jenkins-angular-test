@@ -102,9 +102,8 @@ pipeline {
 		stage('API semaphore') {
             steps {
                 script {
-                    def response = httpRequest(url: params.ENDPOINT_URL/* + "?commit=${env.GIT_COMMIT}"*/, httpMode: 'GET')
-
-                    // Controlla la risposta
+                    def response = httpRequest(url: params.ENDPOINT_URL, httpMode: 'GET')
+					//def response = httpRequest(url: params.ENDPOINT_URL + "?commit=${env.GIT_COMMIT}", httpMode: 'GET')
                     if (response.status == 200) {
                         echo "Endpoint response: ${response.status}"
                     } else {
