@@ -12,6 +12,9 @@ pipeline {
     }
 	
     stages {
+	    stage('SCM') {
+		    checkout scm
+		}
 		stage('Sonarqube') {
 		    environment {
 		        scannerHome = tool 'SonarQubeScanner'
