@@ -12,21 +12,7 @@ pipeline {
     }
 	
     stages {
-		stage('Sonarqube') {
-		    environment {
-		        scannerHome = tool 'SonarQubeScanner'
-		    }
-		    steps {
-		    	checkout scm
-		        withSonarQubeEnv('SonarQubeServer') {
-		            sh "${scannerHome}/bin/sonar-scanner"
-		        }
-		        timeout(time: 10, unit: 'MINUTES') {
-		            waitForQualityGate abortPipeline: true
-		        }
-		    }
-		}
-        /*stage('Dependencies') {
+        stage('Dependencies') {
             steps {
                 sh 'npm install -g @angular/cli && npm install'
                 sh 'npm install -g echo-cli'
@@ -103,8 +89,8 @@ pipeline {
 		stage('API semaphore') {
             steps {
                 script {
-                    def response = httpRequest(url: params.ENDPOINT_URL, httpMode: 'GET')
-					//def response = httpRequest(url: params.ENDPOINT_URL + "?commit=${env.GIT_COMMIT}", httpMode: 'GET')
+                    //def response = httpRequest(url: params.ENDPOINT_URL + "?commit=${env.GIT_COMMIT}", httpMode: 'GET')
+					def response = httpRequest(url: params.ENDPOINT_URL, httpMode: 'GET')
                     if (response.status == 200) {
                         echo "Endpoint response: ${response.status}"
                     } else {
@@ -112,6 +98,6 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
     }
 }
