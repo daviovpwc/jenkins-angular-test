@@ -12,7 +12,20 @@ pipeline {
     }
 	
     stages {
-        stage('Dependencies') {
+		stage('Sonarqube') {
+		    environment {
+		        scannerHome = tool 'sonarqube-scanner'
+		    }
+		    steps {
+		        withSonarQubeEnv('sonarqube') {
+		            sh "${scannerHome}/bin/sonar-scanner"
+		        }
+		        timeout(time: 10, unit: 'MINUTES') {
+		            waitForQualityGate abortPipeline: true
+		        }
+		    }
+		}
+        /*stage('Dependencies') {
             steps {
                 sh 'npm install -g @angular/cli && npm install'
                 sh 'npm install -g echo-cli'
@@ -99,6 +112,6 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
     }
 }
