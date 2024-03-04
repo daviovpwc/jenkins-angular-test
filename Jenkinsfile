@@ -48,7 +48,7 @@ pipeline {
 	                    def tsFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
 	                    
 	                    println "Analyzing the following components:"
-	                    tsFiles.each { sh(script: "echo-cli ${it + " " + params.PATH_TO_ROUTE_FILE + "/" + params.ROUTE_FILE_NAME}}", returnStdout: true).trim()
+	                    tsFiles.each { sh(script: "echo-cli ${it + " " + params.PATH_TO_ROUTE_FILE + "/" + params.ROUTE_FILE_NAME}}", returnStdout: true).trim() }
 					}
                 }
             }
