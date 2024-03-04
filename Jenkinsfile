@@ -18,71 +18,38 @@ pipeline {
                 sh 'npm install -g echo-cli'
             }
         }
-        stage('Build') {
+        stage('Build project') {
             steps {
                 sh 'ng build'
             }
         }
-        stage('Start') {
+        stage('Start project') {
             steps {
                 sh 'npm start &'
             }
         }
-        stage('Routes retrieve') {
+		stage('Retrieve Git info') {
             steps {
                 script {
-                    dir(params.PATH_TO_ROUTE_FILE) {
+                    env.MY_GIT_AUTHOR = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
 
-                        def routeFileContent = readFile(params.ROUTE_FILE_NAME).trim()
-                        
-                        def paths = (routeFileContent =~ $/[\s]*path[\s]*:[\s]*'([^']*)'/$)
-                        
-                        def pathArray = []
-                        
-                        paths.each { match ->
-                            pathArray.add(match[1])
-                        }
-                        
-                        env.ROUTES = pathArray.join('\n')
-                    }
+                    echo "Git Commit: ${env.GIT_COMMIT}"
+                    echo "Git Author: ${env.MY_GIT_AUTHOR}"
+					echo "Git Branch: ${env.GIT_BRANCH}"
                 }
             }
         }
-		stage('.html files retrieve') {
-			steps {
-				script {
+        stage('Accessibility analysis...') {
+        	steps {
+                script {
 					dir(params.PATH_TO_DIR) {
-						def findCommand = "find . -type f -name '*component.html' -exec readlink -f {} \\;"
+						def findCommand = "find . -type f -name '*component.ts' -exec readlink -f {} \\;"
 	                    
-	                    def htmlFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
+	                    def tsFiles = sh(script: findCommand, returnStdout: true).trim().split('\n')
 	                    
-	                    println "Percorsi dei file HTML trovati:"
-	                    htmlFiles.each { println "file://" + it }
+	                    println "Analyzing the following components:"
+	                    tsFiles.each { sh(script: "echo-cli ${it + " " + params.PATH_TO_ROUTE_FILE + "/" + params.ROUTE_FILE_NAME}}", returnStdout: true).trim()
 					}
-				}
-			}
-		}
-		stage('Git info') {
-            steps {
-                script {
-                    def gitCommit = env.GIT_COMMIT
-                    def gitAuthor = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
-					def gitBranch = env.GIT_BRANCH
-
-                    echo "Git Commit: ${gitCommit}"
-                    echo "Git Author: ${gitAuthor}"
-					echo "Git Branch: ${gitBranch}"
-                }
-            }
-        }
-        stage('Npm calls for each route') {
-            steps {
-                script {
-                    def routesArray = env.ROUTES.tokenize('\n')
-                    routesArray.each { route ->
-                        def output = sh(script: "echo-cli ${route}", returnStdout: true).trim()
-                        println "Route: ${route}, Output: ${output}"
-                    }
                 }
             }
         }
@@ -97,6 +64,14 @@ pipeline {
                         error "Check accessibilità fallito: ${response.status}"
                     }
                 }
+            }
+        }
+    }
+
+	post {
+        always {
+            script {
+                sh 'pkill -f "ng serve"'
             }
         }
     }
